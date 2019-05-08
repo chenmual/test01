@@ -1,0 +1,59 @@
+apply plugin: 'java'
+apply plugin: 'com.google.protobuf'
+
+group 'chenmual.test'
+version '1.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile (
+        "io.netty:netty-all:4.1.35.Final",
+        "com.google.protobuf:protobuf-java:3.7.1",
+        "com.google.protobuf:protobuf-java-util:3.7.1",
+        "org.apache.thrift:libthrift:0.12.0",
+        "org.slf4j:slf4j-nop:1.7.26",
+        "io.grpc:grpc-netty-shaded:1.20.0",
+        "io.grpc:grpc-protobuf:1.20.0",
+        "io.grpc:grpc-stub:1.20.0",
+    )
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
+    }
+}
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.7.1"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.20.0'
+        }
+    }
+    
+
+    generatedFilesBaseDir = "src"//改变默认生成generate目录
+
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {
+                setOutputSubDir 'java'//改变默认生成generate目录
+            }
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
