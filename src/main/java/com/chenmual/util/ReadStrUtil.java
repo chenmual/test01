@@ -3,40 +3,31 @@ package com.chenmual.util;
 import java.io.*;
 
 public class ReadStrUtil {
+	public static String enfile = "S08E05_EN.srt";
+	public static String cnfile = "S08E05_CN.srt";
 	public static void main(String[] args) throws IOException {
 //		read();
+//		checkNum();
 		checkTime();
 	}
 
+	/**
+	 * 读取一个英文字幕 把所有非结尾换行整合成一行
+	 * @throws IOException
+	 */
 	public static void read() throws IOException {
-//		FileInputStream fileInputStream = new FileInputStream("S08E04_EN.srt");
-		FileReader fileReader = new FileReader("S08E04_EN.srt");
-//		InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+		FileReader fileReader = new FileReader(enfile);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 		String str1 = null;
 		boolean needSpace = false;
-//		boolean needNum = true;
-//		String[] strs = new String[10];
-//		StringBuffer stringBuffer = new StringBuffer();
  		int count = 0;
 		while((str1 = bufferedReader.readLine()) != null ){
 			str1 = str1.trim();
 			char c = 0;
 			if(str1.length() > 0){
 				c = str1.charAt(str1.length() - 1);
-//				if(needNum){
-//					try {
-//						int a = Integer.parseInt(str1);
-//						if(a != count + 1){
-//							stringBuffer.append(str1);
-//						}
-//					}catch(Exception e){
-//						System.out.println("exception");
-//					}
-//				}
 			}
-//			needNum = false;
 			if(c <= 122 && c >= 97){
 				System.out.print(str1 + " ");
 				needSpace = true;
@@ -47,9 +38,7 @@ public class ReadStrUtil {
 						needSpace = false;
 					}
 					System.out.println(str1);
-//				new Scanner(System.in).nextLine();
 					count++;
-//					needNum = true;
 				}else{
 					System.out.println(str1);
 					if(needSpace){
@@ -58,8 +47,37 @@ public class ReadStrUtil {
 				}
 			}
 		}
-//		System.out.println(stringBuffer.toString());
-//		System.out.println(count);
+		bufferedReader.close();
+	}
+
+	public static void checkNum() throws IOException {
+		FileReader fileReader = new FileReader(cnfile);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+		String str1 = null;
+		boolean needNum = true;
+		StringBuffer stringBuffer = new StringBuffer();
+		int countDown = 1;
+		int sum = 1;
+		while((str1 = bufferedReader.readLine()) != null ){
+			str1 = str1.trim();
+			countDown--;
+			if(countDown == 0){
+					try {
+						int a = Integer.parseInt(str1);
+						if(a != sum){
+							stringBuffer.append(str1);
+						}
+					}catch(Exception e){
+						System.out.println("exception:" + str1);
+					}
+			}
+			if("".equals(str1)){
+				countDown = 1;
+				sum++;
+			}
+		}
+		System.out.println(stringBuffer.toString());
 		bufferedReader.close();
 	}
 
@@ -68,10 +86,10 @@ public class ReadStrUtil {
 	 * @throws IOException
 	 */
 	public static void checkTime() throws IOException {
-		FileReader fileReader1 = new FileReader("S08E04_EN.srt");
+		FileReader fileReader1 = new FileReader(enfile);
 		BufferedReader bufferedReader1 = new BufferedReader(fileReader1);
 
-		FileReader fileReader2 = new FileReader("S08E04_CN.srt");
+		FileReader fileReader2 = new FileReader(cnfile);
 		BufferedReader bufferedReader2 = new BufferedReader(fileReader2);
 
 		int read1 = 2;
@@ -129,4 +147,11 @@ public class ReadStrUtil {
 		bufferedReader1.close();
 		bufferedReader2.close();
 	}
+	/**
+	 *
+	 str1.replace("：", ":");
+	 str1.replace("（", "(");
+	 str1.replace("）", ")");
+	 str1.replace("？", "?");
+	 */
 }
